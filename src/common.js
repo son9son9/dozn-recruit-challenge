@@ -31,10 +31,11 @@ export const checkToken = () => {
 // 로그아웃 타이머
 export const logoutTimer = (navigate) => {
   const decoded = decodedToken();
+  // 토큰이 존재하지 않으면 false 반환
+  if (!decoded) return false;
   const now = new Date().getTime();
   const remainTime = parseInt(decoded.exp) * 1000 - parseInt(now);
   //   const remainTime = parseInt(now + 10000) - parseInt(now);
-  console.log(remainTime);
 
   // 타임아웃 설정
   const timer = setTimeout(() => {
