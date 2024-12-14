@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/login/Login";
 import Home from "./components/home/Home";
 import List from "./components/list/list";
+import Popup from "./components/popup/Popup";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/list" element={<List />} />
+        <Route path="/popup" element={<Popup />} />
       </Routes>
     </BrowserRouter>
   );
