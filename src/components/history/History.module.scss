@@ -1,0 +1,72 @@
+.container {
+  .top-nav {
+    color: currentColor;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.5rem;
+    margin: 1rem;
+    width: fit-content;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .sort-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+
+    .sort-button {
+      color: currentColor;
+      width: 6rem;
+      height: 2.5rem;
+      padding: 0 0.6rem;
+      margin: 0 0.5rem;
+
+      &:active {
+        transform: scale(95%);
+      }
+    }
+  }
+
+  .card-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+
+    .card {
+      font-size: 0.9rem;
+      width: 10rem;
+      height: 12rem;
+      padding: 2.5rem 2rem;
+      border-radius: 8px;
+      box-shadow: 1px 1px 1px 1px #202020;
+      transition: 0.05s;
+      background-color: #2e2e2e;
+      text-align: start;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+      cursor: pointer;
+
+      &:active {
+        transform: scale(97%);
+      }
+
+      .pin {
+        position: absolute;
+        width: 1.3rem;
+        padding: 0.6rem;
+        top: 0.2rem;
+        right: 0.2rem;
+      }
+
+      span.name {
+        color: #ffffffa2;
+      }
+    }
+  }
+}

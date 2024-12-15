@@ -5,7 +5,11 @@ const Popup = () => {
   const [scrapingData] = useState(localStorage.getItem("dozn-scraping-data"));
 
   if (!scrapingData) {
-    return <div className={`${styles.container} render-animation`}></div>;
+    return (
+      <div className={`${styles.container} render-animation`}>
+        <div className="loader" />
+      </div>
+    );
   } else {
     return (
       <div className={`${styles.container} render-animation`}>

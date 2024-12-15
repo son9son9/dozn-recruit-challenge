@@ -4,6 +4,7 @@ import Login from "./components/login/Login";
 import Home from "./components/home/Home";
 import List from "./components/list/list";
 import Popup from "./components/popup/Popup";
+import History from "./components/history/History";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/list" element={<List />} />
         <Route path="/popup" element={<Popup />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </BrowserRouter>
   );

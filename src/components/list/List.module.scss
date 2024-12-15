@@ -2,6 +2,18 @@
   display: flex;
   flex-direction: column;
 
+  .top-nav {
+    color: currentColor;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.5rem;
+    margin: 1rem;
+    width: fit-content;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
   table {
     border-collapse: collapse;
     border-color: currentcolor;

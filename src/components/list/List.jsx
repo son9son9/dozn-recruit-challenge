@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./list.module.scss";
-import { checkToken, logoutTimer } from "../../common";
+import { checkToken, logoutTimer, requestScrapingData } from "../../common";
 import { Link, useNavigate } from "react-router-dom";
 
 const List = () => {
@@ -29,33 +29,9 @@ const List = () => {
     }
   };
 
-  // 스크래핑 데이터 요청
-  const requestScrapingData = async (value) => {
-    try {
-      // localStorage 내 스크래핑 데이터 초기화
-      localStorage.removeItem("dozn-scraping-data");
-
-      const response = await fetch(`https://admin.octover.co.kr/admin/api/recruit/scrp-recruit?mdulCustCd=${value.mdulCustCd}&apiCd=${value.apiCd}`, {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-
-      const result = await response.json();
-      const coreData = { ...result.data.out.data };
-      localStorage.setItem("dozn-scraping-data", JSON.stringify(coreData));
-      // 팝업 오픈
-      window.open("/popup", "팝업", "width = 800, height = 600, toolbar=no, scrollbars=no, resizable=yes, location = no");
-    } catch (error) {
-      console.error(error);
-      alert("데이터를 불러오는 데 실패했습니다.");
-    }
-  };
-
   // 호출 버튼 클릭 핸들러
   const callPopupHandler = (value) => {
-    requestScrapingData(value);
+    requestScrapingData(value, token);
   };
 
   // 페이지 클릭 핸들러
@@ -89,6 +65,9 @@ const List = () => {
 
   return (
     <div className={`${styles.container} render-animation`}>
+      <Link to="/history" className={styles["top-nav"]}>
+        API 조회 내역
+      </Link>
       <h2>API 목록</h2>
       <table>
         <thead>
