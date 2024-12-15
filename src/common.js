@@ -63,13 +63,13 @@ export const requestScrapingData = async (apiParams, token, caller) => {
     });
 
     const result = await response.json();
-    console.log(result.data.out.data);
     // 에러 제어
     if (result.errYn !== "N") {
       throw new Error(result.msg);
     }
-    let coreData = { ...result.data.out.data[apiParams.apiCd].data };
-    console.log(coreData);
+
+    // 스크래핑 데이터 가공
+    const coreData = { ...result.data.out.data[apiParams.apiCd].data };
 
     // 팝업 데이터 저장
     localStorage.setItem("dozn-scraping-data", JSON.stringify(coreData));
