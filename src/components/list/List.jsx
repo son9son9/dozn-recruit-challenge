@@ -22,10 +22,15 @@ const List = () => {
       });
 
       const result = await response.json();
+      // 에러 제어
+      if (result.errYn !== "N") {
+        throw new Error(result.msg);
+      }
       setTotalPage(result.data.totalPage);
       setApiList(result.data.list);
     } catch (error) {
       console.error(error);
+      alert(error);
     }
   };
 

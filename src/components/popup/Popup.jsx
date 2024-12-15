@@ -1,6 +1,11 @@
 import { useState } from "react";
 import styles from "./Popup.module.scss";
 
+// JSON string formatter
+function formatJson(jsonString) {
+  return jsonString.replace(/{/g, "{\n").replace(/}/g, "\n}").replace(/,/g, ",\n").replace(/:/g, ": ");
+}
+
 const Popup = () => {
   const [scrapingData] = useState(localStorage.getItem("dozn-scraping-data"));
 
@@ -13,7 +18,7 @@ const Popup = () => {
   } else {
     return (
       <div className={`${styles.container} render-animation`}>
-        <div className={styles.content}>{scrapingData}</div>
+        <pre className={styles.content}>{formatJson(scrapingData)}</pre>
       </div>
     );
   }

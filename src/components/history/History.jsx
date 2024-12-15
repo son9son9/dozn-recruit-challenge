@@ -23,6 +23,14 @@ const History = () => {
     setSortType(!sortType);
   };
 
+  // 내역 초기화 버튼 클릭 핸들러
+  const removeClickHandler = () => {
+    if (confirm("조회 내역을 초기화 하시겠습니까?")) {
+      setDataList([]);
+      setPinnedList([]);
+    }
+  };
+
   // 북마크 클릭 핸들러
   const pinClickHandler = (e, value) => {
     e.stopPropagation();
@@ -98,9 +106,14 @@ const History = () => {
       </Link>
       <h2>API 조회 내역</h2>
       <div className={styles["sort-box"]}>
-        <div>정렬 순서</div>
+        {/* <div className={styles["button-box"]}>
+          <div>정렬 순서</div> */}
         <button onClick={sortClickHandler} className={styles["sort-button"]}>
           {sortType ? "최신 순" : "오래된 순"}
+        </button>
+        {/* </div> */}
+        <button onClick={removeClickHandler} className={styles["sort-button"]}>
+          내역 초기화
         </button>
       </div>
       <div className={styles["card-box"]}>

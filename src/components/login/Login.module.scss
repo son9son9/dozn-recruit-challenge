@@ -11,5 +11,14 @@
       border: 1px solid #1a1a1a;
       border-radius: 8px;
     }
+
+    button {
+      background-color: #181818;
+      border: 1px solid #1a1a1a;
+
+      &:hover {
+        border-color: #646cff;
+      }
+    }
   }
 }

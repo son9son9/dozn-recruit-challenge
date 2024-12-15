@@ -1,10 +1,13 @@
 .container {
-  width: 700px;
+  width: 92vw;
   display: flex;
   flex-direction: column;
   word-break: break-all;
 
   .content {
+    text-align: start;
     width: 100%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
   }
 }

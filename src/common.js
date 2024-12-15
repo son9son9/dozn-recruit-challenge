@@ -63,7 +63,13 @@ export const requestScrapingData = async (apiParams, token, caller) => {
     });
 
     const result = await response.json();
-    const coreData = { ...result.data.out.data };
+    console.log(result.data.out.data);
+    // 에러 제어
+    if (result.errYn !== "N") {
+      throw new Error(result.msg);
+    }
+    let coreData = { ...result.data.out.data[apiParams.apiCd].data };
+    console.log(coreData);
 
     // 팝업 데이터 저장
     localStorage.setItem("dozn-scraping-data", JSON.stringify(coreData));
@@ -111,10 +117,10 @@ export const requestScrapingData = async (apiParams, token, caller) => {
       }
     }
     // 팝업 오픈
-    window.open("/popup", "팝업", "width = 800, height = 600, toolbar=no, scrollbars=no, resizable=yes, location = no");
+    window.open("/popup", "팝업", "width = 800, height = 800, toolbar=no, scrollbars=no, resizable=yes, location = no");
   } catch (error) {
     console.error(error);
-    alert("데이터를 불러오는 데 실패했습니다.");
+    alert(error);
   }
 };
 

@@ -19,9 +19,8 @@ const Login = () => {
       });
 
       const result = await response.json();
-      // 로그인 오류 제어
+      // 에러 제어
       if (result.errYn !== "N") {
-        alert(result.msg);
         throw new Error(result.msg);
       }
       // localStorage에 token 저장
@@ -29,7 +28,8 @@ const Login = () => {
       // 리스트 페이지로 이동
       navigate("/list");
     } catch (error) {
-      console.error("실패\n", error);
+      console.error(error);
+      alert(error);
     }
   };
 
