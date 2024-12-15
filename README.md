@@ -1,8 +1,57 @@
-# React + Vite
+# 더즌(Dozn) 프론트엔드 채용 과제
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+더즌 프론트엔드 코딩테스트 프로젝트입니다.
 
-Currently, two official plugins are available:
+## 프로젝트 설명
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+제공받은 엔드포인트와 API 주소를 활용해 데이터 스크래핑 조회 웹사이트를 구축했습니다.
+
+### 개발 환경
+
+- VS Code
+- Node.js (v22.3.0)
+- Npm (v10.8.1)
+- Vite (v6.0.3)
+- React (v18.3.1)
+
+### 플로우
+
+#### Root 페이지
+
+처음 접속 시 뜨는 root 페이지입니다. 버튼을 누르면 로그인 화면으로 이동합니다.
+
+#### 로그인 페이지
+
+1. 제공받은 계정을 입력하고 로그인 버튼을 누르면 서버에 로그인을 요청합니다.
+2. 성공적으로 response가 오면, token 값을 localStorage에 저장합니다.
+3. setTimeout() 함수를 사용하여 response의 token expire와 현재 시간을 계산하여 로그아웃을 예약하고, expire의 시간이 지나면 자동으로 로그아웃되며 로그인 화면으로 이동합니다. (해당 로직은 페이지를 이동할 때마다 동작합니다.)
+4. API 목록 화면으로 이동합니다.
+
+#### API 목록 페이지
+
+1. 토큰 유효성 검사를 실시합니다. 실패 시 알림을 띄우고 로그인 화면으로 이동합니다.
+2. API 목록을 서버에 요청(pageSize = 10)하고 응답 값이 테이블 형식으로 화면에 나타납니다.
+3. 화면 하단에 페이지 이동 버튼을 누르면 원하는 페이지(pageIdx)를 다시 요청하고 응답 값을 화면에 리렌더링합니다.
+4. 각 데이터마다 존재하는 호출 버튼을 누르면 스크래핑 데이터를 서버에 요청하고 응답 값을 localStorage에 저장한 후 팝업을 띄웁니다.
+5. 호출 버튼 클릭 시 localStorage에 api 정보를 배열 형식으로 추가합니다. (조회 내역 데이터로 활용)
+6. 우측 상단 API 조회 내역 버튼을 누르면 API 조회 내역 페이지로 이동합니다.
+
+#### 팝업 페이지
+
+localStorage에 등록한 응답 값(스크래핑 데이터)을 불러와서 보여줍니다.
+
+#### API 조회 내역 페이지
+
+1. 토큰 유효성 검사를 실시합니다. 실패 시 알림을 띄우고 로그인 화면으로 이동합니다.
+2. localStorage에 저장된 배열 형식의 조회 내역을 불러와 카드 형태로 보여줍니다.
+3. 중앙의 정렬 버튼 클릭 시 최신 순, 오래된 순으로 토글되며 내역들이 정렬됩니다.
+4. 카드 우측 상단 핀 아이콘을 클릭하면 해당 카드가 화면 최상단에 고정되며, 고정된 핀 클릭 시 원래 자리로 돌아가 정렬됩니다.
+5. 카드를 누르면 해당 카드의 API 정보로 서버에 스크래핑 데이터를 요청하며, 팝업이 발생하고 응답 값을 보여줍니다.
+6. 우측 상단 API 목록 버튼을 누르면 API 목록 페이지로 돌아갑니다.
+
+## 실행 방법
+
+1. 프로젝트를 clone 합니다.
+2. 터미널에서 프로젝트 폴더로 이동 후 `npm i` 를 입력해 모듈을 설치합니다.
+3. 모듈 설치가 끝나면 `npm run dev` 입력하여 로컬서버를 실행합니다.
+4. 터미널 콘솔에 나오는 포트값으로 접속합니다.
