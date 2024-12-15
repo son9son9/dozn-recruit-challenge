@@ -120,7 +120,7 @@ export const requestScrapingData = async (apiParams, token, caller) => {
 
 // 정렬 로직
 export const sorter = (arr, sortType) => {
-  if (arr.length < 1) return [];
+  if (!arr) return [];
   // sortType에 따라 최신 순, 오래된 순으로 정렬
   if (sortType) {
     const orderByNew = [...arr].sort((a, b) => {

@@ -19,9 +19,10 @@ const Login = () => {
       });
 
       const result = await response.json();
-      // 502 오류 제어
-      if (result.data.accessToken === "[object Object]" || "") {
-        throw new Error("502 (Bad gateway)");
+      // 로그인 오류 제어
+      if (result.errYn !== "N") {
+        alert(result.msg);
+        throw new Error(result.msg);
       }
       // localStorage에 token 저장
       localStorage.setItem("dozn-login-token", result.data.accessToken);

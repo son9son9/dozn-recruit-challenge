@@ -10,8 +10,8 @@ const History = () => {
   const [token, setToken] = useState("");
   // 정렬 방식 : true = 최신 순, false = 오래된 순
   const [sortType, setSortType] = useState(true);
-  const [dataList, setDataList] = useState(JSON.parse(localStorage.getItem("dozn-scraping-data-history")));
-  const [pinnedList, setPinnedList] = useState(JSON.parse(localStorage.getItem("dozn-scraping-data-history-pinned")));
+  const [dataList, setDataList] = useState(JSON.parse(localStorage.getItem("dozn-scraping-data-history")) || []);
+  const [pinnedList, setPinnedList] = useState(JSON.parse(localStorage.getItem("dozn-scraping-data-history-pinned")) || []);
 
   // 카드 클릭 핸들러
   const cardClickHandler = (value) => {
@@ -81,7 +81,7 @@ const History = () => {
     }
   }, [dataList]);
 
-  if (!dataList) {
+  if (dataList.length === 0 && pinnedList.length === 0) {
     return (
       <div className={`${styles.container} render-animation`}>
         <Link to="/list" className={styles["top-nav"]}>
