@@ -39,8 +39,8 @@ const Login = () => {
   };
 
   // 엔터키 입력 시 로그인 로직 동작
-  const keyPressHandler = (e) => {
-    if (e.keyCode === 13) {
+  const keyPressHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
       loginHandler();
     }
   };

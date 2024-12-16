@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./list.module.scss";
 import { checkToken, logoutTimer, requestScrapingData } from "../../common";
 import { Link, useNavigate } from "react-router-dom";
+import { ApiResult } from "../../model/model";
 
 const List = () => {
   const navigate = useNavigate();
@@ -35,12 +36,12 @@ const List = () => {
   };
 
   // 호출 버튼 클릭 핸들러
-  const callPopupHandler = (value) => {
-    requestScrapingData(value, token);
+  const callPopupHandler = (value: ApiResult) => {
+    requestScrapingData(value, token, "list");
   };
 
   // 페이지 클릭 핸들러
-  const pageClickHandler = (page) => {
+  const pageClickHandler = (page: number) => {
     setPageIdx(page);
   };
 
@@ -52,7 +53,7 @@ const List = () => {
     }
 
     // api 호출을 위해 토큰 불러오기
-    setToken(localStorage.getItem("dozn-login-token"));
+    setToken(localStorage.getItem("dozn-login-token") || "");
 
     // 로그아웃 타이머 생성
     const timer = logoutTimer(navigate);
@@ -96,7 +97,7 @@ const List = () => {
               </td>
             </tr>
           )}
-          {apiList.map((value, i) => {
+          {apiList.map((value: ApiResult, i) => {
             return (
               <tr key={i}>
                 <td>{value.apiNm}</td>

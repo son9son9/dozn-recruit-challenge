@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from "./Popup.module.scss";
 
 // JSON string formatter
-function formatJson(jsonString) {
+function formatJson(jsonString: string) {
   return jsonString.replace(/{/g, "{\n").replace(/}/g, "\n}").replace(/,/g, ",\n").replace(/:/g, ": ");
 }
 

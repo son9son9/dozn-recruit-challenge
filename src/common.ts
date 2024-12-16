@@ -1,7 +1,9 @@
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode, JwtPayload } from "jwt-decode";
+import { ApiResult, HistoryData } from "./model/model";
+import { NavigateFunction } from "react-router-dom";
 
 // JWT 토큰 복호화
-export const decodeData = (data) => {
+export const decodeData = (data: string) => {
   if (data) {
     const decoded = jwtDecode(data);
     return decoded;
@@ -9,11 +11,10 @@ export const decodeData = (data) => {
 };
 
 // 토큰 불러와서 decode
-const decodedToken = () => {
+const decodedToken = (): JwtPayload | undefined => {
   // localStorage에서 토큰 불러오기
-  const token = localStorage.getItem("dozn-login-token");
+  const token = localStorage.getItem("dozn-login-token") || "";
   // 토큰이 존재하지 않으면 false 반환
-  if (!token) return false;
   return decodeData(token);
 };
 
@@ -21,7 +22,7 @@ const decodedToken = () => {
 export const checkToken = () => {
   const decoded = decodedToken();
   const now = new Date().getTime();
-  const remainTime = decoded.exp * 1000 - now;
+  const remainTime: number = decoded?.exp ? decoded.exp * 1000 - now : 0;
 
   // 남은 시간이 1 이상이면 true, 1 미만이면 false
   if (remainTime > 0) return true;
@@ -29,13 +30,12 @@ export const checkToken = () => {
 };
 
 // 로그아웃 타이머
-export const logoutTimer = (navigate) => {
+export const logoutTimer = (navigate: NavigateFunction) => {
   const decoded = decodedToken();
   // 토큰이 존재하지 않으면 false 반환
   if (!decoded) return false;
   const now = new Date().getTime();
-  const remainTime = parseInt(decoded.exp) * 1000 - parseInt(now);
-  //   const remainTime = parseInt(now + 10000) - parseInt(now);
+  const remainTime: number = decoded?.exp ? decoded.exp * 1000 - now : 0;
   console.log("로그아웃까지 남은 시간 :", remainTime);
 
   // 타임아웃 설정
@@ -50,7 +50,7 @@ export const logoutTimer = (navigate) => {
 };
 
 // 스크래핑 데이터 요청
-export const requestScrapingData = async (apiParams, token, caller) => {
+export const requestScrapingData = async (apiParams: ApiResult, token: string, caller: string) => {
   try {
     // localStorage 내 스크래핑 데이터 초기화
     localStorage.removeItem("dozn-scraping-data");
@@ -69,10 +69,10 @@ export const requestScrapingData = async (apiParams, token, caller) => {
     }
 
     // 스크래핑 데이터 가공
-    const coreData = { ...result.data.out.data[apiParams.apiCd].data };
+    const scrapedData = { ...result.data.out.data[apiParams.apiCd].data };
 
     // 팝업 데이터 저장
-    localStorage.setItem("dozn-scraping-data", JSON.stringify(coreData));
+    localStorage.setItem("dozn-scraping-data", JSON.stringify(scrapedData));
 
     // 조회 내역에서 호출 시 localStorage 등록 과정 생략
     if (caller !== "history") {
@@ -80,41 +80,24 @@ export const requestScrapingData = async (apiParams, token, caller) => {
       const now = new Date().getTime();
       const history = localStorage.getItem("dozn-scraping-data-history");
       const parsedHistory = history ? JSON.parse(history) : "";
-      if (parsedHistory) {
-        // history 페이지에 필요한 정보 삽입
-        localStorage.setItem(
-          "dozn-scraping-data-history",
-          JSON.stringify([
-            ...parsedHistory,
-            {
-              ...coreData,
-              apiInfo: {
-                apiNm: apiParams.apiNm,
-                apiCd: apiParams.apiCd,
-                mdulNm: apiParams.mdulNm,
-                mdulCustCd: apiParams.mdulCustCd,
-                callTime: now,
-              },
+
+      // history 페이지에 필요한 정보 삽입
+      localStorage.setItem(
+        "dozn-scraping-data-history",
+        JSON.stringify([
+          ...(parsedHistory || []),
+          {
+            scrapedData: { ...scrapedData },
+            apiInfo: {
+              apiNm: apiParams.apiNm,
+              apiCd: apiParams.apiCd,
+              mdulNm: apiParams.mdulNm,
+              mdulCustCd: apiParams.mdulCustCd,
+              callTime: now,
             },
-          ])
-        );
-      } else {
-        localStorage.setItem(
-          "dozn-scraping-data-history",
-          JSON.stringify([
-            {
-              ...coreData,
-              apiInfo: {
-                apiNm: apiParams.apiNm,
-                apiCd: apiParams.apiCd,
-                mdulNm: apiParams.mdulNm,
-                mdulCustCd: apiParams.mdulCustCd,
-                callTime: now,
-              },
-            },
-          ])
-        );
-      }
+          } as HistoryData,
+        ] as Array<HistoryData>)
+      );
     }
     // 팝업 오픈
     window.open("/popup", "팝업", "width = 800, height = 800, toolbar=no, scrollbars=no, resizable=yes, location = no");
@@ -125,13 +108,13 @@ export const requestScrapingData = async (apiParams, token, caller) => {
 };
 
 // 정렬 로직
-export const sorter = (arr, sortType) => {
+export const sorter = (arr: Array<HistoryData>, sortType: Boolean) => {
   if (!arr) return [];
   // sortType에 따라 최신 순, 오래된 순으로 정렬
   if (sortType) {
     const orderByNew = [...arr].sort((a, b) => {
-      const aTime = parseInt(a.apiInfo.callTime);
-      const bTime = parseInt(b.apiInfo.callTime);
+      const aTime = a.apiInfo.callTime;
+      const bTime = b.apiInfo.callTime;
       if (aTime < bTime) {
         return 1;
       } else if (aTime > bTime) {
@@ -141,8 +124,8 @@ export const sorter = (arr, sortType) => {
     return orderByNew;
   } else {
     const orderByOld = [...arr].sort((a, b) => {
-      const aTime = parseInt(a.apiInfo.callTime);
-      const bTime = parseInt(b.apiInfo.callTime);
+      const aTime = a.apiInfo.callTime;
+      const bTime = b.apiInfo.callTime;
       if (aTime > bTime) {
         return 1;
       } else if (aTime < bTime) {
@@ -154,9 +137,9 @@ export const sorter = (arr, sortType) => {
 };
 
 // 시간 변환 함수 (YYYY-MM-DD HH:mm)
-export const dateFormatter = (time) => {
+export const dateFormatter = (time: string) => {
   if (!time) return false;
-  const converter = (n) => {
+  const converter = (n: number) => {
     return n >= 10 ? n : `0${n}`;
   };
   const dateInstance = new Date(time);

@@ -4,17 +4,18 @@ import { checkToken, dateFormatter, logoutTimer, requestScrapingData, sorter } f
 import { Link, useNavigate } from "react-router-dom";
 import Pin from "../../assets/pin.svg";
 import Pinned from "../../assets/pinned.svg";
+import { ApiResult, HistoryData } from "../../model/model";
 
 const History = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState("");
   // 정렬 방식 : true = 최신 순, false = 오래된 순
   const [sortType, setSortType] = useState(true);
-  const [dataList, setDataList] = useState(JSON.parse(localStorage.getItem("dozn-scraping-data-history")) || []);
-  const [pinnedList, setPinnedList] = useState(JSON.parse(localStorage.getItem("dozn-scraping-data-history-pinned")) || []);
+  const [dataList, setDataList] = useState(JSON.parse(localStorage.getItem("dozn-scraping-data-history") || "") || []);
+  const [pinnedList, setPinnedList] = useState(JSON.parse(localStorage.getItem("dozn-scraping-data-history-pinned") || "") || []);
 
   // 카드 클릭 핸들러
-  const cardClickHandler = (value) => {
+  const cardClickHandler = (value: ApiResult) => {
     requestScrapingData(value, token, "history");
   };
 
@@ -32,16 +33,16 @@ const History = () => {
   };
 
   // 북마크 클릭 핸들러
-  const pinClickHandler = (e, value) => {
+  const pinClickHandler = (e: React.MouseEvent<HTMLImageElement, MouseEvent>, value: HistoryData) => {
     e.stopPropagation();
 
-    const checkPinnedList = pinnedList.filter((data) => JSON.stringify(data) === JSON.stringify(value));
+    const checkPinnedList = pinnedList.filter((data: HistoryData) => JSON.stringify(data) === JSON.stringify(value));
 
     // 기존 북마크에 존재하는지 확인
     if (checkPinnedList.length > 0) {
       // 이미 북마크에 존재 시
       // pinnedList에서 제거 및 dataList에 추가
-      setPinnedList(pinnedList.filter((data) => JSON.stringify(data) !== JSON.stringify(value)));
+      setPinnedList(pinnedList.filter((data: HistoryData) => JSON.stringify(data) !== JSON.stringify(value)));
       setDataList(dataList ? [...dataList, value] : [value]);
     } else {
       // 북마크에 존재하지 않을 시 새로 북마크에 등록
@@ -59,7 +60,7 @@ const History = () => {
     }
 
     // api 호출을 위해 토큰 불러오기
-    setToken(localStorage.getItem("dozn-login-token"));
+    setToken(localStorage.getItem("dozn-login-token") || "");
 
     // 로그아웃 타이머 생성
     const timer = logoutTimer(navigate);

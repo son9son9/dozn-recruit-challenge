@@ -13,6 +13,7 @@
 - Npm (v10.8.1)
 - Vite (v6.0.3)
 - React (v18.3.1)
+- TypeScript (v5.7.2)
 
 ### 플로우
 

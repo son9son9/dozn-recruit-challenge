@@ -2,7 +2,7 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/login/Login";
 import Home from "./components/home/Home";
-import List from "./components/list/list";
+import List from "./components/list/List";
 import Popup from "./components/popup/Popup";
 import History from "./components/history/History";
 
